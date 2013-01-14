@@ -1,0 +1,73 @@
+@(tasks: List[Task], taskForm: Form[TaskForm])(implicit lang: play.api.i18n.Lang)
+@import play.api.i18n.Messages
+@import views.html.helper.FieldElements
+@import views.html.helper._
+@import helper.twitterBootstrap._
+
+@main("ToDo List") {
+    
+<div class="container">
+	<div id="header">
+		<div class="hero-unit">
+			<h1>ToDo LIST</h1>
+			<p>playframework(scala) + mongoDBのサンプルです。Cake PatternとSpec2 + mockitoも利用しました。<br>
+		</div>
+	</div>
+	<form action="/tasks" method="POST" class="form-horizontal">
+		<fieldset>
+			<div class="control-group">
+				<label class="control-label" for="input01">内容</label>
+				<div class="controls">
+					<input type="text" name="todo" class="input-xlarge" placeholder="タスクを入力">
+					<span class="help-inline"></span>
+				</div>
+			</div>
+	
+			<div class="control-group">
+				<label class="control-label" for="input02">期日</label>
+				<div class="controls">
+					<input type="text" id="datepicker" name="termDate" class="input-small" placeholder="期限を入力" >
+					<span class="help-inline"></span>
+				</div>
+			</div>
+	
+			<div class="control-group">
+				<label class="control-label" for="input03">重要度</label>
+				<div class="controls">
+					<select id="priorty" name="priority" class="input-small">@TaskForm.priorities.map { item => @if(item == Priority.Normal) {<option selected="">@item</option>} else { <option>@item</option> } }</select>
+					<span class="help-inline"></span>
+				</div>
+			</div>
+	
+			<div class="form-actions">
+				<button type="submit" class="btn btn btn-primary">追加</button>
+			</div>
+		</fieldset>
+	</form>
+
+	<h2>@tasks.size task(s)</h2>
+	<table class="table table-striped table-condensed">
+	    <thead>
+	        <tr><th></th><th width="70%">タスク</th><th>期日</th><th>重要度</th><th></th></tr>
+	    </thead>
+	    <tbody>
+	        @tasks.map { task =>
+	        <tr>
+	            @if(task.status == Status.Todo)  {<td>@form(routes.TaskController.actionTask(task.id)) {<button type="submit" class="btn btn-mini btn-danger"><i class="icon-play icon-white" style="margin-top: 1px;"></i> @task.status</button>}</td>}
+		        @if(task.status == Status.Doing) {<td>@form(routes.TaskController.actionTask(task.id)) {<button type="submit" class="btn btn-mini btn-warning"><i class="icon-play icon-white" style="margin-top: 1px;"></i> @task.status</button>}</td>}
+		        @if(task.status == Status.Done)  {<td><button type="button" class="btn btn-mini btn-success"><i class="icon-ok icon-white" style="margin-top: 1px;"></i> @task.status</button></td>}
+		        <td>@task.todo</td>
+		        <td>@Task.toDateFormatString(task.termDate)</td>
+		        @if(task.priority == Priority.High)   { <td><span class="label label-important">@task.priority</span></td> }
+		        @if(task.priority == Priority.Normal) { <td><span class="label label-success">@task.priority</span></td> }
+		        @if(task.priority == Priority.Low)    { <td><span class="label label-info">@task.priority</span></td> }
+		        <td>@form(routes.TaskController.deleteTask(task.id)) {<button type="submit" class="btn btn-mini btn-danger"><i class="icon-remove icon-white" style="margin-top: 1px;"></i> 削除</button>}</td>
+	        </tr>
+	        }
+	    </tbody>
+	</table>
+    <div id="footer">
+        <a href="http://github.com/rising3">http://github.com/rising3</a>
+    </div>
+</div>    
+}
