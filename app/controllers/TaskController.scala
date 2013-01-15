@@ -21,8 +21,8 @@ object TaskController
   with TaskServiceComponent
   with TaskRepositoryComponent {
   
-  val taskService = new TaskService
-  val taskRepository = new TaskRepository
+  val taskService = new TaskServiceImpl
+  val taskRepository = new MongoTaskRepositoryImpl
 }
 
 /**

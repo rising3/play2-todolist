@@ -17,7 +17,7 @@ import models._
  */
 trait MockComponentContext extends Scope with Mockito with TaskServiceComponent with TaskRepositoryComponent {
   val taskRepository = mock[TaskRepository]
-  val taskService = new TaskService
+  val taskService = new TaskServiceImpl()
 
   val task = Task("test task", new Date(), Priority.High)
   val task1 = Task("test task1", new Date(), Priority.High)

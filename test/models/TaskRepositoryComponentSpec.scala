@@ -20,7 +20,7 @@ import org.bson.types.ObjectId
  * @author michio.nakagawa@gmail.com
  */
 trait FakeAppContext extends Scope with BeforeAfter with TaskRepositoryComponent {
-  lazy val taskRepository = new TaskRepository()
+  lazy val taskRepository = new MongoTaskRepositoryImpl()
   lazy val salatApp = FakeApplication(
     additionalPlugins = Seq("se.radley.plugin.salat.SalatPlugin"))
   lazy val app = salatApp.copy(
