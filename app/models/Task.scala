@@ -61,6 +61,7 @@ object Task {
   val df = new SimpleDateFormat("yyyy-MM-dd");
 
   def apply(todo: String, termDate: Date, priority: Priority.Value) = new Task(todo = todo, createDate = new Date(), termDate = termDate, status = Status.Todo, priority = priority)
+
   def unupply(task: Task) = Some((task.id, task.todo, task.createDate, task.termDate, task.status, task.priority))
 
   /**
