@@ -1,6 +1,5 @@
 @(tasks: List[Task], taskForm: Form[TaskForm])(implicit lang: play.api.i18n.Lang)
 @import play.api.i18n.Messages
-@import views.html.helper.FieldElements
 @import views.html.helper._
 @import helper.twitterBootstrap._
 
@@ -10,31 +9,37 @@
 	<div id="header">
 		<div class="hero-unit">
 			<h1>ToDo LIST</h1>
-			<p>playframework(scala) + mongoDBのサンプルです。Cake PatternとSpec2 + mockitoも利用しました。<br>
+			<p>playframework(scala) + mongoDBのサンプルです。Cake PatternとSpecs2 + mockitoも利用しました。<br>
 		</div>
 	</div>
 	<form action="/tasks" method="POST" class="form-horizontal">
 		<fieldset>
-			<div class="control-group">
+			<div class="control-group @if(taskForm("todo").hasErrors) {error}">
 				<label class="control-label" for="input01">内容</label>
 				<div class="controls">
-					<input type="text" name="todo" class="input-xlarge" placeholder="タスクを入力">
-					<span class="help-inline"></span>
+					<input type="text" name="todo" value="@taskForm("todo").value" placeholder="タスクを入力"　class="input-xlarge"></input>
+					@if(taskForm("todo").hasErrors) { <span class="help-inline">Messages(taskForm("todo").error.get.message)</span> }
 				</div>
 			</div>
 	
-			<div class="control-group">
+			<div class="control-group @if(taskForm("termDate").hasErrors) {error}">
 				<label class="control-label" for="input02">期日</label>
 				<div class="controls">
-					<input type="text" id="datepicker" name="termDate" class="input-small" placeholder="期限を入力" >
-					<span class="help-inline"></span>
+					<input type="text" id="datepicker" name="termDate" value="@taskForm("termDate").value" placeholder="期限を入力" class="input-small"></input>
+					@if(taskForm("termDate").hasErrors) { <span class="help-inline">@Messages(taskForm("termDate").error.get.message)</span> }
 				</div>
 			</div>
 	
-			<div class="control-group">
+			<div class="control-group @if(taskForm("priority").hasErrors) {error}">
 				<label class="control-label" for="input03">重要度</label>
 				<div class="controls">
-					<select id="priorty" name="priority" class="input-small">@TaskForm.priorities.map { item => @if(item == Priority.Normal) {<option selected="">@item</option>} else { <option>@item</option> } }</select>
+					<select id="priorty" name="priority" class="input-small">
+					@if(taskForm("priority").value.isEmpty) {
+					  @TaskForm.priorities.map { item => <option @if(item == Priority.Normal) { selected="" }>@item</option>}
+					} else {
+					  @TaskForm.priorities.map { item => <option @if(item == Priority.withName(taskForm("priority").value.get)) { selected="" }>@item</option>}
+					}
+					</select>
 					<span class="help-inline"></span>
 				</div>
 			</div>

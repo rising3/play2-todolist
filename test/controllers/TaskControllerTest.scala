@@ -66,10 +66,11 @@ class TaskControllerSpec extends Specification {
       // mock setting
       taskService.findAll() returns List()
 
-      val result = newTask()(FakeRequest())
+      val result = newTask(FakeRequest())
 
       // Verification
       there was one(taskService).findAll()
+      
       status(result) must equalTo(play.api.http.Status.BAD_REQUEST)
       contentType(result) must beSome("text/html")
     }
@@ -77,15 +78,18 @@ class TaskControllerSpec extends Specification {
 
       val task = Task("task", new Date(), models.Priority.High)
 
-      val fakeReq = FakeRequest()
-      fakeReq.withFormUrlEncodedBody(("todo","task"),("termDate","2013-01-01"),("priority","High"))
-      val result = newTask()(fakeReq)
+      val result = newTask(
+        FakeRequest().withFormUrlEncodedBody(
+            "todo"     -> "task",
+            "termDate" -> "2013-01-01",
+            "priority" -> "High")
+        )
 
       // Verification
       there was one(taskService).persist(task)
       status(result) must equalTo(play.api.http.Status.SEE_OTHER)
       contentType(result) must beNone
-    }.pendingUntilFixed
+    }
   }
 
   "TaskController#actionTask" should {
