@@ -1,12 +1,13 @@
 package models
-import java.util.Date
-import com.novus.salat.annotations.raw.Salat
-import commons.utils.ValidationUtil.validate
-import scalaz.Scalaz._
-import com.novus.salat.annotations.raw.Key
-import org.bson.types.ObjectId
-import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.Date
+
+import org.bson.types.ObjectId
+
+import com.novus.salat.annotations.raw.Key
+
+import commons.utils.ValidationUtil._
+import scalaz.Scalaz._
 
 /**
  * ステータス列挙体.
@@ -58,6 +59,7 @@ case class Task(
  * @author michio.nakagawa@gmail.com
  */
 object Task {
+  
   val df = new SimpleDateFormat("yyyy-MM-dd");
 
   def apply(todo: String, termDate: Date, priority: Priority.Value) = new Task(todo = todo, createDate = new Date(), termDate = termDate, status = Status.Todo, priority = priority)
